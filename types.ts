@@ -2,7 +2,7 @@ export interface LinkItem {
   title: string;
   url: string;
   description?: string;
-  icon?: 'download' | 'link' | 'play' | 'shield';
+  icon?: "download" | "link" | "play" | "shield";
 }
 
 export interface PasteCode {
@@ -14,6 +14,7 @@ export interface WebChannel {
   name: string;
   url: string;
   accessCode?: string;
+  description?: string;
 }
 
 export interface MagmaConfig {
