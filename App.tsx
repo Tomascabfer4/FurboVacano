@@ -8,6 +8,7 @@ import { MagmaCard } from "./components/MagmaCard";
 import { PasteGrid } from "./components/PasteGrid";
 import { CopyButton } from "./components/CopyButton";
 import { CollapsibleGuide } from "./components/CollapsibleGuide";
+import UpdateChecker from "./components/UpdateChecker";
 
 import {
   MAIN_DOWNLOAD_LINK,
@@ -27,6 +28,7 @@ enum Tab {
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.GUIDE);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (mobileMenuOpen) {
@@ -42,7 +44,6 @@ const App: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_10%,rgba(50,50,150,0.3),transparent_60%)]"></div>
       <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,rgba(100,50,150,0.3),transparent_50%)]"></div>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
-      {/* Nota: Para producción offline idealmente deberías descargar este SVG a tu carpeta public */}
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
     </div>
   );
@@ -77,6 +78,9 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden selection:bg-purple-500/30">
+      {/* 2. AÑADIMOS EL COMPONENTE AQUÍ PARA QUE SE EJECUTE SIEMPRE */}
+      <UpdateChecker />
+
       <Background />
 
       {/* Header Corregido para Safe Area / Notch */}
@@ -91,7 +95,7 @@ const App: React.FC = () => {
         <div className="max-w-4xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-              src="icon-192.png" // Quitada la barra inicial para compatibilidad APK
+              src="icon-192.png"
               alt="Furbo Vacano"
               className="w-10 h-10 rounded-xl shadow-lg"
             />
