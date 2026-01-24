@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
+import { CapacitorHttp } from "@capacitor/core";
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import { FileOpener } from "@capacitor-community/file-opener";
 import { Download } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 
-// Tu URL (Asegúrate de que es correcta)
+// Tu URL de GitHub
 const VERSION_JSON_URL =
   "https://raw.githubusercontent.com/Tomascabfer4/FurboVacano/refs/heads/main/version.json";
 
@@ -20,40 +21,32 @@ const UpdateChecker: React.FC = () => {
 
   const checkForUpdate = async () => {
     try {
-      // 1. Ver qué versión tiene la App
+      // 1. Ver qué versión tiene la App instalada
       const appInfo = await App.getInfo();
       const currentVersion = appInfo.version;
 
-      // ALERTA 1: Para saber si el código arranca
-      // alert(`CHEQUEANDO... \nMi versión es: ${currentVersion}`);
-
-      // 2. Truco Anti-Caché: Añadimos ?t=tiempo para obligar a refrescar
+      // 2. Consultar GitHub (con truco anti-caché)
+      // Usamos fetch normal aquí porque es solo texto JSON y es más rápido
       const response = await fetch(`${VERSION_JSON_URL}?t=${Date.now()}`);
 
       if (!response.ok) {
-        alert("Error: No se pudo conectar con GitHub");
+        // Si falla (ej: sin internet), salimos en silencio sin molestar al usuario
         return;
       }
 
       const data = await response.json();
 
-      // ALERTA 2: Para saber qué lee de GitHub
-      alert(`DIAGNÓSTICO:\nMi App: ${currentVersion}\nGitHub: ${data.version}`);
-
-      // 3. Comparar
+      // 3. Comparar versiones
       if (isNewerVersion(currentVersion, data.version)) {
         setUpdateAvailable(data);
-      } else {
-        // ALERTA 3: Solo si quieres confirmar que no hay update
-        // alert("No hay actualización necesaria.");
       }
-    } catch (error: any) {
-      alert("ERROR GRAVE: " + JSON.stringify(error));
+    } catch (error) {
+      // Si hay error (sin internet, etc), lo ignoramos silenciosamente
+      console.error("Error buscando actualizaciones:", error);
     }
   };
 
   const isNewerVersion = (oldVer: string, newVer: string) => {
-    // Si alguna versión viene vacía, salimos
     if (!oldVer || !newVer) return false;
 
     const oldParts = oldVer.split(".").map(Number);
@@ -66,47 +59,43 @@ const UpdateChecker: React.FC = () => {
     return false;
   };
 
-  // ... (El resto de funciones downloadAndInstall y el return déjalos igual) ...
-  // Para no pegar todo el bloque gigante, mantén tu parte de 'downloadAndInstall'
-  // y el 'return' de abajo tal cual los tenías.
-
   const downloadAndInstall = async () => {
     if (!updateAvailable) return;
     setDownloading(true);
+    setProgress(10); // Feedback visual inmediato
 
     try {
-      // 1. Verificar si el enlace existe antes de descargar
-      const response = await fetch(updateAvailable.downloadUrl);
+      // 1. Descarga NATIVA (Usando CapacitorHttp para evitar bloqueos/CORS)
+      const response = await CapacitorHttp.get({
+        url: updateAvailable.downloadUrl,
+        responseType: "blob", // Vital para que Filesystem lo entienda
+        headers: {
+          "User-Agent": "FurboVacanoApp",
+          Accept: "application/vnd.android.package-archive",
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error(`Error HTTP del Servidor: ${response.status}`);
+      if (response.status !== 200) {
+        throw new Error(`Error del servidor: ${response.status}`);
       }
 
-      // 2. Descargar
-      const blob = await response.blob();
-
-      // Protección: Si lo que baja es muy pequeño (ej: página de error 404 de GitHub), abortar
-      if (blob.size < 1000) {
-        throw new Error(
-          "El archivo es demasiado pequeño. ¿Es el enlace correcto?",
-        );
+      if (!response.data) {
+        throw new Error("La descarga vino vacía.");
       }
 
       setProgress(50);
 
-      // 3. Convertir y Guardar
-      const base64Data = (await blobToBase64(blob)) as string;
+      // 2. Guardar archivo en caché
       const fileName = "update.apk";
-
       const savedFile = await Filesystem.writeFile({
         path: fileName,
-        data: base64Data,
+        data: response.data,
         directory: Directory.Cache,
       });
 
       setProgress(100);
 
-      // 4. Abrir instalador
+      // 3. Abrir el instalador de Android
       await FileOpener.open({
         filePath: savedFile.uri,
         contentType: "application/vnd.android.package-archive",
@@ -114,71 +103,72 @@ const UpdateChecker: React.FC = () => {
 
       setDownloading(false);
     } catch (error: any) {
-      console.error(error);
-      // AQUÍ ESTÁ EL CAMBIO: Usamos .message en vez de stringify
-      alert("Fallo: " + (error.message || JSON.stringify(error)));
+      console.error("Error detallado:", error);
+      // Aquí SÍ mostramos alerta porque el usuario pidió descargar
+      alert("Error al actualizar: " + (error.message || "Fallo de conexión"));
       setDownloading(false);
     }
-  };
-
-  const blobToBase64 = (blob: Blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
   };
 
   if (!updateAvailable) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <GlassCard className="max-w-sm w-full !bg-slate-900/90 border border-purple-500/30">
-        <div className="text-center space-y-4">
-          <div className="mx-auto w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400">
-            <Download size={24} />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+      <GlassCard className="max-w-sm w-full !bg-slate-900/95 border border-purple-500/30 shadow-2xl">
+        <div className="text-center space-y-5">
+          <div className="mx-auto w-14 h-14 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 ring-2 ring-purple-500/20">
+            <Download size={28} />
           </div>
-          <h3 className="text-xl font-bold text-white">
-            ¡Nueva Actualización!
-          </h3>
-          <div className="bg-white/5 p-3 rounded-lg text-left">
-            <p className="text-sm text-white/60">
-              Versión actual: <span className="text-red-400">Old</span>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-1">
+              ¡Nueva Actualización!
+            </h3>
+            <p className="text-white/50 text-sm">
+              Hay una nueva versión disponible
             </p>
-            <p className="text-sm text-white/90 font-bold">
-              Nueva versión:{" "}
-              <span className="text-green-400">{updateAvailable.version}</span>
-            </p>
-            <p className="text-xs text-white/50 mt-2 border-t border-white/10 pt-2">
+          </div>
+
+          <div className="bg-white/5 p-4 rounded-xl text-left border border-white/5">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs text-white/40 font-medium uppercase tracking-wider">
+                Versión
+              </span>
+              <span className="text-sm font-bold text-green-400 bg-green-400/10 px-2 py-0.5 rounded-md">
+                v{updateAvailable.version}
+              </span>
+            </div>
+            <p className="text-sm text-white/70 leading-relaxed">
               {updateAvailable.releaseNotes}
             </p>
           </div>
+
           {downloading ? (
-            <div className="space-y-2">
-              <p className="text-sm text-purple-300 animate-pulse">
-                Descargando e instalando...
-              </p>
+            <div className="space-y-3 pt-2">
+              <div className="flex justify-between text-xs text-purple-300">
+                <span>Descargando...</span>
+                <span>{progress}%</span>
+              </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-purple-500 transition-all duration-500"
+                  className="h-full bg-purple-500 transition-all duration-300 ease-out"
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>
             </div>
           ) : (
-            <div className="flex gap-3">
+            <div className="flex gap-3 pt-2">
               <button
                 onClick={() => setUpdateAvailable(null)}
-                className="flex-1 py-2 rounded-lg text-white/60 hover:bg-white/10 text-sm font-medium"
+                className="flex-1 py-3 rounded-xl text-white/60 hover:bg-white/10 hover:text-white text-sm font-medium transition-colors"
               >
-                Después
+                Ahora no
               </button>
               <button
                 onClick={downloadAndInstall}
-                className="flex-1 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold shadow-lg shadow-purple-500/20"
+                className="flex-1 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold shadow-lg shadow-purple-500/25 active:scale-95 transition-all"
               >
-                Actualizar
+                Instalar
               </button>
             </div>
           )}

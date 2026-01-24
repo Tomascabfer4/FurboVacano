@@ -1,9 +1,17 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.tomypollas.furbovacano',
-  appName: 'FurboVacano',
-  webDir: 'dist'
+  appId: "com.furbovacano.app", // Tu ID
+  appName: "Furbo Vacano",
+  webDir: "dist",
+  server: {
+    androidScheme: "https",
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;
