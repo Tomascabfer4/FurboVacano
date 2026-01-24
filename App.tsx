@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Tv, Globe, Shield, Radio, Key, Menu, X } from "lucide-react";
+import { Download, Globe, Shield, Radio, Key, Menu, X } from "lucide-react";
 
 import { GlassCard } from "./components/GlassCard";
 import { LinkButton } from "./components/LinkButton";
@@ -27,13 +27,22 @@ enum Tab {
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.GUIDE);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [mobileMenuOpen]);
 
-  // Background Mesh Gradient
   const Background = () => (
     <div className="fixed inset-0 -z-10 bg-black">
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_10%,rgba(50,50,150,0.3),transparent_60%)]"></div>
       <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,rgba(100,50,150,0.3),transparent_50%)]"></div>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
+      {/* Nota: Para producción offline idealmente deberías descargar este SVG a tu carpeta public */}
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
     </div>
   );
@@ -70,12 +79,19 @@ const App: React.FC = () => {
     <div className="min-h-screen text-white overflow-x-hidden selection:bg-purple-500/30">
       <Background />
 
-      {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-black/10 border-b border-white/5">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      {/* Header Corregido para Safe Area / Notch */}
+      <header
+        className="sticky top-0 z-50 backdrop-blur-xl bg-black/10 border-b border-white/5"
+        style={{
+          // Esto añade el espacio de la cámara + 1rem de aire
+          paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
+          paddingBottom: "1rem",
+        }}
+      >
+        <div className="max-w-4xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-              src="/favicon.ico"
+              src="icon-192.png" // Quitada la barra inicial para compatibilidad APK
               alt="Furbo Vacano"
               className="w-10 h-10 rounded-xl shadow-lg"
             />
@@ -109,7 +125,9 @@ const App: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden fixed inset-x-0 top-[73px] z-40 bg-black/90 backdrop-blur-2xl border-b border-white/10 p-4 flex flex-col gap-2 shadow-2xl"
+          // Ajustado el top para que no tape el header
+          className="md:hidden fixed inset-x-0 top-[100px] z-40 bg-black/90 backdrop-blur-2xl border-b border-white/10 p-4 flex flex-col gap-2 shadow-2xl"
+          style={{ top: "calc(env(safe-area-inset-top) + 80px)" }}
         >
           <NavItem tab={Tab.GUIDE} label="Guía y Apps" icon={Download} />
           <NavItem tab={Tab.CODES} label="Códigos MyLinkPaste" icon={Key} />
