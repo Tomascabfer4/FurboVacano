@@ -1,0 +1,50 @@
+1. ¿Qué tengo que hacer para lanzar una actualización?
+Imagina que hoy arreglas un error o añades un canal nuevo. Para que eso llegue a los móviles de todos tus usuarios, sigue este ritual:
+
+Paso 1: Sube la versión en Android (OBLIGATORIO)
+Android no deja instalar una actualización si tiene el mismo número que la anterior.
+
+Abre android/app/build.gradle.
+
+Busca versionCode y súmale 1 (ej: de 1 a 2).
+
+Busca versionName y cambia el nombre (ej: de 1.0.0 a 1.0.1).
+
+Dale a "Sync Now" (el elefante o la barra amarilla arriba).
+
+Paso 2: Genera el nuevo APK
+En la terminal: npm run build y npx cap sync.
+
+En el menú de Android Studio: Build > Build Bundle(s) / APK(s) > Build APK(s).
+
+Cuando termine, localiza el archivo .apk (normalmente en debug o release).
+
+Paso 3: Súbelo a GitHub Releases (El Almacén)
+Ve a tu repo en GitHub > Releases > Draft a new release.
+
+Crea un tag nuevo (ej: v1.0.1).
+
+Sube tu archivo .apk ahí.
+
+Dale a "Publish".
+
+IMPORTANTE: Haz clic derecho en el archivo .apk que acabas de publicar (en Assets) y copia el enlace de descarga.
+
+Paso 4: Da la señal (version.json)
+Este es el "botón rojo" que activa la actualización en los móviles.
+
+Edita tu archivo version.json en GitHub.
+
+Cambia "version": "1.0.1" (tiene que coincidir con el versionName del Paso 1).
+
+Pega el enlace nuevo en "downloadUrl".
+
+Escribe las novedades en "releaseNotes".
+
+Guarda (Commit).
+
+Paso 5: Sube el código a GitHub
+Git pull para traerte los cambios de version.json
+git add . y git commit -m "Actualización v1.0.1" y git push.
+
+¡Listo! En el momento que guardes el version.json, la próxima vez que alguien abra tu App, verá el aviso.
