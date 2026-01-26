@@ -60,6 +60,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Play,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Magma_v10.apk",
     color: "from-orange-500 to-red-600",
+    size: "19.5",
   },
   {
     title: "FCTV (Móvil)",
@@ -67,6 +68,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Smartphone,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.app-release-314-v3.0.314.apk",
     color: "from-blue-500 to-blue-700",
+    size: "18.8",
   },
   {
     title: "FCTV (TV Box/FireStick)",
@@ -74,6 +76,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Tv,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.tv-release-314-v3.0.314.apk",
     color: "from-indigo-500 to-purple-700",
+    size: "18.8",
   },
   {
     title: "90 Minutos",
@@ -81,6 +84,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Zap,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/90Minutos.apk",
     color: "from-green-500 to-emerald-700",
+    size: "30.4",
   },
   {
     title: "Zona Deportiva Plus",
@@ -88,6 +92,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Zap,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Zonadeportivaplus.apk",
     color: "from-red-500 to-pink-700",
+    size: "15.9",
   },
   {
     title: "Info Deportes TV",
@@ -95,6 +100,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Tv,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/InfoDeportestvbox.apk",
     color: "from-yellow-500 to-amber-700",
+    size: "20.4",
   },
   {
     title: "MyLinkPaste",
@@ -102,6 +108,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: LinkIcon,
     url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/MylinkPaste-v4.3.apk",
     color: "from-gray-500 to-gray-700",
+    size: "5.46",
   },
   // --- NUEVOS ACESTREAM DARK MOD ---
   {
@@ -111,6 +118,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Play,
     url: "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-7/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm7.apk",
     color: "from-emerald-600 to-teal-800",
+    size: "110",
   },
   {
     title: "Acestream Dark (Potente)",
@@ -118,6 +126,7 @@ export const STREAMING_APPS: LinkItem[] = [
     icon: Play,
     url: "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-8/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm8.apk",
     color: "from-emerald-600 to-teal-800",
+    size: "118",
   },
 ];
 

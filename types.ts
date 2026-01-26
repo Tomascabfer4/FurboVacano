@@ -4,6 +4,7 @@ export interface LinkItem {
   description?: string;
   icon?: any;
   color?: string;
+  size?: string;
 }
 
 export interface PasteCode {
