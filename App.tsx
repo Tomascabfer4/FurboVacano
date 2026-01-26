@@ -159,19 +159,19 @@ const App: React.FC = () => {
               defaultOpen={true}
               steps={[
                 {
-                  title: "Descarga las Apps",
+                  title: "1. Descarga Directa",
                   description:
-                    "Usa el botón 'Pack Principal' de abajo. Te llevará a Google Drive. Descarga e instala las aplicaciones (APKs) en tu dispositivo (Android Móvil o TV Box/FireStick).",
+                    "Ve a la sección 'Aplicaciones Específicas' más abajo. Simplemente toca el botón de la app que quieras (ej: Magma, FCTV...) y la descarga comenzará automáticamente.",
                 },
                 {
-                  title: "Permisos de Android",
+                  title: "2. Permisos de Android",
                   description:
-                    "Si es la primera vez que instalas algo fuera de la Play Store, tu dispositivo pedirá permiso para 'Instalar apps desconocidas'. Debes darle 'Permitir'.",
+                    "Al abrir el archivo descargado, tu dispositivo bloqueará la instalación por seguridad. Debes ir a Ajustes y permitir 'Instalar apps desconocidas' para esta fuente.",
                 },
                 {
-                  title: "¿Qué App uso?",
+                  title: "3. ¿Qué App elijo?",
                   description:
-                    "Recomendamos 'Magma Player' para listas estables o 'Cricfy' para deportes rápidos. Mira sus secciones abajo para instrucciones específicas.",
+                    "Usa 'Magma Player' si buscas estabilidad y calidad (requiere configuración). Usa 'FCTV' o '90 Minutos' para ver partidos rápido sin configurar nada.",
                 },
               ]}
             />

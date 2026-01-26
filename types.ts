@@ -2,7 +2,8 @@ export interface LinkItem {
   title: string;
   url: string;
   description?: string;
-  icon?: "download" | "link" | "play" | "shield";
+  icon?: any;
+  color?: string;
 }
 
 export interface PasteCode {

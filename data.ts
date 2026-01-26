@@ -1,11 +1,21 @@
 import { LinkItem, PasteCode, WebChannel, MagmaConfig } from "./types";
+// Importamos los iconos necesarios para que se vean bien visualmente
+import {
+  Download,
+  Smartphone,
+  Tv,
+  Zap,
+  Link as LinkIcon,
+  Play,
+  Shield,
+  Globe,
+} from "lucide-react";
 
 export const MAIN_DOWNLOAD_LINK: LinkItem = {
   title: "Carpeta de Descargas (Drive)",
   url: "https://drive.google.com/drive/folders/1eZTpKjQMp2XO2eryD-Un1gjRM3crBcMo?usp=drive_link",
-  description:
-    "Todas las aplicaciones mencionadas (90Minutos, FCTV, Magma, etc.)",
-  icon: "download",
+  description: "Respaldo de todas las aplicaciones.",
+  icon: Download, // Icono importado
 };
 
 export const VPN_TOOLS: LinkItem[] = [
@@ -13,25 +23,25 @@ export const VPN_TOOLS: LinkItem[] = [
     title: "ProtonVPN",
     url: "https://protonvpn.com/es-es/download",
     description: "Opción A: Evitar restricciones geográficas",
-    icon: "shield",
+    icon: Shield,
   },
   {
     title: "Cloudflare DNS (1.1.1.1)",
     url: "https://one.one.one.one/",
     description: "Opción B: Mejorar conectividad y privacidad",
-    icon: "shield",
+    icon: Shield,
   },
   {
     title: "Hotspot Shield VPN",
     url: "https://www.hotspotshield.com/vpn/",
     description: "Opción C: VPN rápida con encriptación militar",
-    icon: "shield",
+    icon: Shield,
   },
   {
     title: "Psiphon",
     url: "https://psiphon.ca/es/download-store.html",
     description: "Opción D: VPN gratuita para evadir censura",
-    icon: "shield",
+    icon: Shield,
   },
 ];
 
@@ -42,28 +52,72 @@ export const MAGMA_DATA: MagmaConfig = {
   downloaderCode: "4042816",
 };
 
+// --- AQUÍ ESTÁ LA ACTUALIZACIÓN CON TUS ENLACES DE GITHUB ---
 export const STREAMING_APPS: LinkItem[] = [
   {
-    title: "Cricfy TV (Móvil)",
-    url: "https://cricfy.net/without-vpn-241/",
-    icon: "download",
+    title: "Magma Player",
+    description: "El reproductor más estable. Recomendado para listas M3U.",
+    icon: Play,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Magma_v10.apk",
+    color: "from-orange-500 to-red-600",
   },
   {
-    title: "Cricfy TV (Android TV)",
-    url: "https://cricfy.net/android-tv-151/#dl",
-    icon: "download",
+    title: "FCTV (Móvil)",
+    description: "Fútbol en directo optimizado para pantallas táctiles.",
+    icon: Smartphone,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.app-release-314-v3.0.314.apk",
+    color: "from-blue-500 to-blue-700",
   },
   {
-    title: "FCTV33 Oficial",
-    url: "https://www.fctv33.lol/es",
-    description: "Si falla, buscar 'FCTV33' en Google",
-    icon: "link",
+    title: "FCTV (TV Box/FireStick)",
+    description: "Versión especial para mando a distancia.",
+    icon: Tv,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.tv-release-314-v3.0.314.apk",
+    color: "from-indigo-500 to-purple-700",
   },
   {
-    title: "Descargar Acestream",
-    url: "https://play.google.com/store/apps/details?id=org.acestream.node&hl=es",
-    description: "Necesario para enlaces P2P y MyLinkPaste",
-    icon: "play",
+    title: "90 Minutos",
+    description: "Alternativa ligera y rápida.",
+    icon: Zap,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/90Minutos.apk",
+    color: "from-green-500 to-emerald-700",
+  },
+  {
+    title: "Zona Deportiva Plus",
+    description: "Eventos deportivos variados.",
+    icon: Zap,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Zonadeportivaplus.apk",
+    color: "from-red-500 to-pink-700",
+  },
+  {
+    title: "Info Deportes TV",
+    description: "Noticias y resultados en tu TV Box.",
+    icon: Tv,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/InfoDeportestvbox.apk",
+    color: "from-yellow-500 to-amber-700",
+  },
+  {
+    title: "MyLinkPaste",
+    description: "Gestor de enlaces necesario para los códigos.",
+    icon: LinkIcon,
+    url: "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/MylinkPaste-v4.3.apk",
+    color: "from-gray-500 to-gray-700",
+  },
+  // --- NUEVOS ACESTREAM DARK MOD ---
+  {
+    title: "Acestream Dark (Universal)",
+    description:
+      "Versión MOD sin anuncios. Funciona en casi todos los dispositivos (ARM7).",
+    icon: Play,
+    url: "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-7/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm7.apk",
+    color: "from-emerald-600 to-teal-800",
+  },
+  {
+    title: "Acestream Dark (Potente)",
+    description: "Optimizado para móviles modernos de 64 bits (ARM8).",
+    icon: Play,
+    url: "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-8/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm8.apk",
+    color: "from-emerald-600 to-teal-800",
   },
 ];
 
@@ -71,17 +125,17 @@ export const ACESTREAM_LISTS: LinkItem[] = [
   {
     title: "Lista 1 (IPFS)",
     url: "https://ipfs.io/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
-    icon: "play",
+    icon: Play,
   },
   {
     title: "Lista 2 (DWeb)",
     url: "https://k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr.ipns.dweb.link/",
-    icon: "play",
+    icon: Play,
   },
   {
     title: "Lista 3 (W3S)",
     url: "https://w3s.link/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
-    icon: "play",
+    icon: Play,
   },
 ];
 
@@ -125,7 +179,6 @@ export const WEB_CHANNELS: WebChannel[] = [
   },
 ];
 
-// Deportes de Contacto (UFC, Boxeo, MMA, etc.)
 export const CONTACT_SPORTS_CHANNELS: WebChannel[] = [
   {
     name: "Goluchitas",
