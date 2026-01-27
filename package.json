@@ -16,6 +16,8 @@
     "@capacitor/core": "^8.0.1",
     "@capacitor/filesystem": "^8.1.0",
     "@emotion/is-prop-valid": "^1.4.0",
+    "cordova-plugin-app-launcher": "^0.4.0",
+    "cordova-plugin-inappbrowser": "^6.0.0",
     "framer-motion": "^12.29.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",

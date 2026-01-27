@@ -5,6 +5,7 @@ export interface LinkItem {
   icon?: any;
   color?: string;
   size?: string;
+  packageName?: string;
 }
 
 export interface PasteCode {

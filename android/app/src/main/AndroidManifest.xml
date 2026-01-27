@@ -6,6 +6,23 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <queries>
+        <package android:name="org.acestream.media" />
+        
+        <package android:name="com.magmaplayer" />
+        
+        <package android:name="com.fctv77.app" />
+        <package android:name="com.fctv77.tv" />
+        
+        <package android:name="com.noventaminutos.oficial" />
+        <package android:name="zona.deportivaofficial" />
+        <package android:name="com.infodeportes.ec" />
+        <package android:name="com.example.mylinkspaste" />
+        
+        <package android:name="org.videolan.vlc" />
+        <package android:name="co.wuffy.player" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
