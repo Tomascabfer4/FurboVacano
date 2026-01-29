@@ -92,4 +92,4 @@ Esta aplicación es un **gestor de enlaces y herramientas**.
 * El usuario es responsable del uso que haga de las herramientas proporcionadas.
 
 ---
-Hecho con ⚽ y ❤️ por [Tu Nombre]
+Hecho con ⚽ y ❤️ por Tomás Cabello Fernández
