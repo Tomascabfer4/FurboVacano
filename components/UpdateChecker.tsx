@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
-import { CapacitorHttp } from "@capacitor/core";
+import { Capacitor, CapacitorHttp } from "@capacitor/core"; // <--- 1. AÑADIDO Capacitor AQUÍ
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import { FileOpener } from "@capacitor-community/file-opener";
 import { Download } from "lucide-react";
@@ -20,17 +20,21 @@ const UpdateChecker: React.FC = () => {
   }, []);
 
   const checkForUpdate = async () => {
+    // 🛑 2. FILTRO DE SEGURIDAD:
+    // Si estamos en Web (no es nativo), paramos aquí y no hacemos nada.
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
     try {
       // 1. Ver qué versión tiene la App instalada
       const appInfo = await App.getInfo();
       const currentVersion = appInfo.version;
 
       // 2. Consultar GitHub (con truco anti-caché)
-      // Usamos fetch normal aquí porque es solo texto JSON y es más rápido
       const response = await fetch(`${VERSION_JSON_URL}?t=${Date.now()}`);
 
       if (!response.ok) {
-        // Si falla (ej: sin internet), salimos en silencio sin molestar al usuario
         return;
       }
 
@@ -41,7 +45,6 @@ const UpdateChecker: React.FC = () => {
         setUpdateAvailable(data);
       }
     } catch (error) {
-      // Si hay error (sin internet, etc), lo ignoramos silenciosamente
       console.error("Error buscando actualizaciones:", error);
     }
   };
@@ -62,13 +65,12 @@ const UpdateChecker: React.FC = () => {
   const downloadAndInstall = async () => {
     if (!updateAvailable) return;
     setDownloading(true);
-    setProgress(10); // Feedback visual inmediato
+    setProgress(10);
 
     try {
-      // 1. Descarga NATIVA (Usando CapacitorHttp para evitar bloqueos/CORS)
       const response = await CapacitorHttp.get({
         url: updateAvailable.downloadUrl,
-        responseType: "blob", // Vital para que Filesystem lo entienda
+        responseType: "blob",
         headers: {
           "User-Agent": "FurboVacanoApp",
           Accept: "application/vnd.android.package-archive",
@@ -85,7 +87,6 @@ const UpdateChecker: React.FC = () => {
 
       setProgress(50);
 
-      // 2. Guardar archivo en caché
       const fileName = "update.apk";
       const savedFile = await Filesystem.writeFile({
         path: fileName,
@@ -95,7 +96,6 @@ const UpdateChecker: React.FC = () => {
 
       setProgress(100);
 
-      // 3. Abrir el instalador de Android
       await FileOpener.open({
         filePath: savedFile.uri,
         contentType: "application/vnd.android.package-archive",
@@ -104,7 +104,6 @@ const UpdateChecker: React.FC = () => {
       setDownloading(false);
     } catch (error: any) {
       console.error("Error detallado:", error);
-      // Aquí SÍ mostramos alerta porque el usuario pidió descargar
       alert("Error al actualizar: " + (error.message || "Fallo de conexión"));
       setDownloading(false);
     }
