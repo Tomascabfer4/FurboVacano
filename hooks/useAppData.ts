@@ -8,7 +8,7 @@ import {
 } from '../data';
 
 // 🔴🔴🔴 PEGA AQUÍ TU URL RAW DE GITHUB (la del Paso 1) 🔴🔴🔴
-const JSON_URL = "https://raw.githubusercontent.com/TU_USUARIO/TU_REPO/main/furbo-data.json";
+const JSON_URL = "https://raw.githubusercontent.com/Tomascabfer4/FurboVacano/refs/heads/main/furbo-data.json";
 
 export const useAppData = () => {
   // Inicializamos con los datos locales (Offline First)
