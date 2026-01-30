@@ -33,7 +33,7 @@ Esta app actúa como un **Lanzador Inteligente**: detecta las herramientas que n
 
 | Menú Principal | Navegador Integrado | Instalador APK |
 |:---:|:---:|:---:|
-| <img src="URL_TU_IMAGEN_MENU" width="300" /> | <img src="URL_TU_IMAGEN_BROWSER" width="300" /> | <img src="URL_TU_IMAGEN_INSTALL" width="300" /> |
+| <img src="screenshots/MenuPrincipal.png" width="300" /> | <img src="screenshots/NavegadorPropio.png" width="300" /> | <img src="screenshots/DescargaAutomatica.png" width="300" /> |
 
 *(Sube tus capturas a la carpeta `screenshots/` y actualiza estos enlaces)*
 
