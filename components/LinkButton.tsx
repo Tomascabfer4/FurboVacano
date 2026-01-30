@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { LinkItem } from "../types";
-import { ExternalLink, Loader2, Download, Globe } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
 import { installApk, DownloadProgress } from "../apkInstaller";
 import { Capacitor } from "@capacitor/core";
-// YA NO IMPORTAMOS AppLauncher AQUÍ
 
 interface LinkButtonProps {
   item: LinkItem;
@@ -36,47 +35,56 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
 
       launcher.launch(
         { packageName: packageName },
-        () => resolve(true), // Éxito: Se abrió
-        () => reject(false), // Error: No instalada
+        () => resolve(true),
+        () => reject(false)
       );
     });
   };
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
+    const url = item.url;
 
-    // --- FASE 1: INTENTAR ABRIR SI YA LA TIENES ---
+    // --- FASE 1: APPS NATIVAS (Magma, FCTV, etc) ---
     if (isNative && item.packageName) {
       try {
-        console.log("Intentando abrir:", item.packageName);
-        // Intentamos lanzar la app
         await launchApp(item.packageName);
-        // Si no dio error, es que se abrió. ¡Terminamos!
         return;
       } catch (err) {
-        // Si cae aquí, es que NO la tienes instalada.
-        console.log("App no instalada, descargando...");
-        // Dejamos que el código siga hacia abajo para descargarla
+        console.log("App no instalada, procediendo a descarga/web...");
       }
     }
 
-    // --- FASE 2: DESCARGAR O NAVEGAR ---
+    // --- FASE 2: MANEJO DE ENLACES ---
 
-    // CASO A: Descarga de APK
-    if (item.url.endsWith(".apk") && isNative) {
+    // 1. SI EL BOTÓN YA ES UN ENLACE ESPECIAL (Acestream directo)
+    if (
+      url.startsWith("acestream://") ||
+      url.startsWith("magnet:") ||
+      url.startsWith("intent:") ||
+      url.startsWith("whatsapp:") ||
+      url.startsWith("tg:")
+    ) {
+      const target = isNative ? "_system" : "_blank";
+      window.open(url, target);
+      return;
+    }
+
+    // 2. DESCARGA DE APK
+    if (url.endsWith(".apk") && isNative) {
       if (loading) return;
       setLoading(true);
       setProgress({ downloadedMB: "0.0", totalMB: "?", percentage: 0 });
 
       setTimeout(async () => {
-        await installApk(item.url, item.title, (info) => setProgress(info));
+        await installApk(url, item.title, (info) => setProgress(info));
         setLoading(false);
       }, 100);
       return;
     }
 
-    // CASO B: Navegador Interno
-    if (item.url.startsWith("http") || item.url.startsWith("https")) {
+    // 3. NAVEGADOR INTERNO (Aquí está la corrección para tu error)
+    if (url.startsWith("http") || url.startsWith("https")) {
       if (isNative) {
         const cordova = (window as any).cordova;
 
@@ -85,39 +93,67 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
             "location=yes,toolbar=yes,hardwareback=yes,zoom=no,beforeload=yes," +
             "toolbarcolor=#0f172a,navigationbuttoncolor=#ffffff,closebuttoncolor=#ffffff,hideurlbar=yes";
 
-          const browser = cordova.InAppBrowser.open(
-            item.url,
-            "_blank",
-            options,
-          );
+          const browser = cordova.InAppBrowser.open(url, "_blank", options);
 
+          // 💉 LA VACUNA: INYECTAR SCRIPT AL CARGAR LA WEB
+          // Esto evita que window.open abra ventanas nuevas y den error.
+          browser.addEventListener("loadstop", () => {
+            browser.executeScript({
+              code: `
+                // Sobrescribimos la función window.open
+                window.open = function(url) {
+                    // Forzamos que cargue en la MISMA ventana
+                    window.location.href = url;
+                };
+              `,
+            });
+          });
+
+          // 🛡️ EL INTERCEPTOR
           browser.addEventListener(
             "beforeload",
             (params: any, callback: any) => {
-              const url = params.url;
-              if (url.startsWith("acestream://") || url.startsWith("magnet:")) {
-                window.open(url, "_system");
+              const clickedUrl = params.url;
+
+              // Detectamos protocolos externos
+              if (
+                clickedUrl.startsWith("acestream://") ||
+                clickedUrl.startsWith("magnet:") ||
+                clickedUrl.startsWith("intent:") ||
+                clickedUrl.startsWith("whatsapp:") ||
+                clickedUrl.startsWith("tg:")
+              ) {
+                // A) Abrimos en el sistema (App externa)
+                window.open(clickedUrl, "_system");
+
+                // B) IMPORTANTE: NO llamamos al callback.
+                // Esto cancela la carga en el navegador interno y evita el error blanco.
               } else {
-                if (callback) callback(url);
+                // Si es navegación normal, permitimos que siga
+                if (callback) callback(clickedUrl);
               }
-            },
+            }
           );
         } else {
-          window.open(item.url, "_system");
+          // Fallback si no hay plugin
+          window.open(url, "_system");
         }
       } else {
-        window.open(item.url, "_blank");
+        // En PC
+        window.open(url, "_blank");
       }
       return;
     }
 
-    // CASO C: Otros
+    // Fallback final
     if (isNative) {
-      window.location.href = item.url;
+      window.location.href = url;
+    } else {
+      window.open(url, "_blank");
     }
   };
 
-  // --- VISUAL (Igual) ---
+  // --- RENDERIZADO VISUAL ---
   const { downloadedMB, totalMB, percentage } = progress;
   let mainText = item.title;
   let subText = isNative ? item.description : "Click para abrir";
@@ -128,8 +164,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
       finalTotalString = item.size.replace(" MB", "");
 
     if (finalTotalString !== "?") {
-      mainText =
-        percentage > 0 ? `Descargando ${percentage}%` : "Descargando...";
+      mainText = percentage > 0 ? `Descargando ${percentage}%` : "Descargando...";
       subText = `${downloadedMB} MB / ${finalTotalString} MB`;
     } else {
       mainText = "Descargando...";
@@ -157,10 +192,7 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
           style={{ width: `${percentage}%` }}
         />
       )}
-      {loading && percentage <= 0 && (
-        <div className="absolute inset-0 z-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9InAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgMjBMMjAgMEgwTDIwIDIwIiBmaWxsPSIjZmZmZiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwKSIvPjwvc3ZnPg==')] animate-progress-stripes" />
-      )}
-
+      
       <div
         className={`relative z-10 w-12 h-12 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${primary ? "bg-white/20" : "bg-white/10"}`}
       >
