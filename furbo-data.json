@@ -133,6 +133,11 @@
   ],
   "webChannels": [
     {
+      "name": "Labubu",
+      "url": "https://fdsfdsfdfdsfd",
+      "description": "dsfdsfsdfsdf"
+    },
+    {
       "name": "Andres Deportes TV",
       "url": "https://delta.andresconv.online/",
       "accessCode": "123601"
