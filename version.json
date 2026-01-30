@@ -1,5 +1,5 @@
 {
-  "version": "1.0.6", 
-  "downloadUrl": "https://github.com/Tomascabfer4/FurboVacano/releases/download/v1.0.6/FurboVacano.apk", 
-  "releaseNotes": "Navegador propio y llamada directa a la aplicación."
+  "version": "1.0.7", 
+  "downloadUrl": "https://github.com/Tomascabfer4/FurboVacano/releases/download/v1.0.7/FurboVacano.apk", 
+  "releaseNotes": "Se ha añadido FurboSync para que los links se actualicen de manera dinamica sin tener que cambiar de version"
 }
