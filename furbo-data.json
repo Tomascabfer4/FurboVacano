@@ -1,0 +1,174 @@
+{
+  "streamingApps": [
+    {
+      "title": "Magma Player",
+      "description": "El reproductor más estable. Recomendado para listas M3U.",
+      "iconName": "play",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Magma_v10.apk",
+      "color": "from-orange-500 to-red-600",
+      "size": "19.5 MB",
+      "packageName": "com.magmaplayer"
+    },
+    {
+      "title": "FCTV (Móvil)",
+      "description": "Fútbol en directo optimizado para pantallas táctiles.",
+      "iconName": "smartphone",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.app-release-314-v3.0.314.apk",
+      "color": "from-blue-500 to-blue-700",
+      "size": "18.8 MB",
+      "packageName": "com.fctv77.app"
+    },
+    {
+      "title": "FCTV (TV Box/FireStick)",
+      "description": "Versión especial para mando a distancia.",
+      "iconName": "tv",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/com.fctv77.tv-release-314-v3.0.314.apk",
+      "color": "from-indigo-500 to-purple-700",
+      "size": "18.8 MB",
+      "packageName": "com.fctv77.tv"
+    },
+    {
+      "title": "90 Minutos",
+      "description": "Alternativa ligera y rápida.",
+      "iconName": "zap",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/90Minutos.apk",
+      "color": "from-green-500 to-emerald-700",
+      "size": "30.4 MB",
+      "packageName": "com.noventaminutos.oficial"
+    },
+    {
+      "title": "Zona Deportiva Plus",
+      "description": "Eventos deportivos variados.",
+      "iconName": "zap",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/Zonadeportivaplus.apk",
+      "color": "from-red-500 to-pink-700",
+      "size": "15.9 MB",
+      "packageName": "zona.deportivaofficial"
+    },
+    {
+      "title": "Info Deportes TV",
+      "description": "Noticias y resultados en tu TV Box.",
+      "iconName": "tv",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/InfoDeportestvbox.apk",
+      "color": "from-yellow-500 to-amber-700",
+      "size": "20.4 MB",
+      "packageName": "com.infodeportes.ec"
+    },
+    {
+      "title": "MyLinkPaste",
+      "description": "Gestor de enlaces necesario para los códigos.",
+      "iconName": "link",
+      "url": "https://github.com/Tomascabfer4/FurboVacano/releases/download/apps-tools/MylinkPaste-v4.3.apk",
+      "color": "from-gray-500 to-gray-700",
+      "size": "5.46 MB",
+      "packageName": "com.example.mylinkspaste"
+    },
+    {
+      "title": "Acestream Dark (Universal)",
+      "description": "Versión MOD sin anuncios. Funciona en casi todos los dispositivos (ARM7).",
+      "iconName": "play",
+      "url": "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-7/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm7.apk",
+      "color": "from-emerald-600 to-teal-800",
+      "size": "110 MB",
+      "packageName": "org.acestream.media"
+    },
+    {
+      "title": "Acestream Dark (Potente)",
+      "description": "Optimizado para móviles modernos de 64 bits (ARM8).",
+      "iconName": "play",
+      "url": "https://archive.org/download/ace-stream-mc-klaus-appss-dark-mod-arm-8/Ace%20Stream%20%40McKlaus_Appss%20Dark%20MOD%20Arm8.apk",
+      "color": "from-emerald-600 to-teal-800",
+      "size": "118 MB",
+      "packageName": "org.acestream.media"
+    }
+  ],
+  "acestreamLists": [
+    {
+      "title": "Agenda IPFS (TOP)",
+      "url": "https://ipfs.io/ipns/k2k4r8oqlcjxsritt5mczkcn4mmvcmymbqw7113fz2flkrerfwfps004/?tab=canales",
+      "description": "Lista descentralizada antibloqueos. Muy recomendada.",
+      "iconName": "play"
+    },
+    {
+      "title": "Lista 1 (IPFS)",
+      "url": "https://ipfs.io/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
+      "iconName": "play"
+    },
+    {
+      "title": "Lista 2 (DWeb)",
+      "url": "https://k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr.ipns.dweb.link/",
+      "iconName": "play"
+    },
+    {
+      "title": "Lista 3 (W3S)",
+      "url": "https://w3s.link/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
+      "iconName": "play"
+    }
+  ],
+  "vpnTools": [
+    {
+      "title": "ProtonVPN",
+      "url": "https://protonvpn.com/es-es/download",
+      "description": "Opción A: Evitar restricciones geográficas",
+      "iconName": "shield"
+    },
+    {
+      "title": "Cloudflare DNS (1.1.1.1)",
+      "url": "https://one.one.one.one/",
+      "description": "Opción B: Mejorar conectividad y privacidad",
+      "iconName": "shield"
+    },
+    {
+      "title": "Hotspot Shield VPN",
+      "url": "https://www.hotspotshield.com/vpn/",
+      "description": "Opción C: VPN rápida con encriptación militar",
+      "iconName": "shield"
+    },
+    {
+      "title": "Psiphon",
+      "url": "https://psiphon.ca/es/download-store.html",
+      "description": "Opción D: VPN gratuita para evadir censura",
+      "iconName": "shield"
+    }
+  ],
+  "webChannels": [
+    {
+      "name": "Andres Deportes TV",
+      "url": "https://delta.andresconv.online/",
+      "accessCode": "123601"
+    },
+    {
+      "name": "Flipax (Agenda)",
+      "url": "https://foknaretre.foroactivo.com/h1-agenda"
+    },
+    {
+      "name": "Canale TV",
+      "url": "https://rds.live/canale-tv-gratis/",
+      "description": "Ve a la barra derecha → selecciona 'Sport'. Los canales PrimaSport (5 en total) suelen tener los partidos principales."
+    },
+    {
+      "name": "Futbol Libre",
+      "url": "https://librefutboltv.su/home/"
+    },
+    {
+      "name": "FCTV33",
+      "url": "https://www.fctv33.lol/es"
+    },
+    {
+      "name": "LIVETV",
+      "url": "https://m.livetv.sx/enx/"
+    },
+    {
+      "name": "BATMANSTREAM",
+      "url": "https://batmanstream.vip/",
+      "description": "Usar VPN, Abrir pestaña del partido q se desea ver y pulsar uno de los enlaces Flash. El enlace se abrirá en una nueva ventana."
+    }
+  ],
+  "contactSports": [
+    {
+      "name": "Goluchitas",
+      "url": "https://goluchitas.com/",
+      "description": "Usar VPN. Recargar o cambiar de enlace si va sobrecargado"
+    }
+  ]
+}

@@ -10,14 +10,11 @@ import { CopyButton } from "./components/CopyButton";
 import { CollapsibleGuide } from "./components/CollapsibleGuide";
 import UpdateChecker from "./components/UpdateChecker";
 
-import {
-  MAIN_DOWNLOAD_LINK,
-  VPN_TOOLS,
-  STREAMING_APPS,
-  ACESTREAM_LISTS,
-  WEB_CHANNELS,
-  CONTACT_SPORTS_CHANNELS,
-} from "./data";
+import { MAIN_DOWNLOAD_LINK } from "./data";
+
+// --- NUEVOS IMPORTS ---
+import { useAppData } from "./hooks/useAppData";
+import { getIconComponent } from "./utils/iconMapper";
 
 enum Tab {
   GUIDE = "guide",
@@ -28,6 +25,15 @@ enum Tab {
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.GUIDE);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // --- USAMOS EL HOOK PARA OBTENER DATOS (Remotos o Locales) ---
+  const { 
+    streamingApps, 
+    acestreamLists, 
+    vpnTools, 
+    webChannels, 
+    contactSports 
+  } = useAppData();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,16 +84,12 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden selection:bg-purple-500/30">
-      {/* 2. AÑADIMOS EL COMPONENTE AQUÍ PARA QUE SE EJECUTE SIEMPRE */}
       <UpdateChecker />
-
       <Background />
 
-      {/* Header Corregido para Safe Area / Notch */}
       <header
         className="sticky top-0 z-50 backdrop-blur-xl bg-black/10 border-b border-white/5"
         style={{
-          // Esto añade el espacio de la cámara + 1rem de aire
           paddingTop: "calc(env(safe-area-inset-top) + 1rem)",
           paddingBottom: "1rem",
         }}
@@ -129,7 +131,6 @@ const App: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          // Ajustado el top para que no tape el header
           className="md:hidden fixed inset-x-0 top-[100px] z-40 bg-black/90 backdrop-blur-2xl border-b border-white/10 p-4 flex flex-col gap-2 shadow-2xl"
           style={{ top: "calc(env(safe-area-inset-top) + 80px)" }}
         >
@@ -143,7 +144,6 @@ const App: React.FC = () => {
       <main className="max-w-3xl mx-auto px-4 py-8 md:py-12 pb-24">
         {activeTab === Tab.GUIDE && (
           <div className="space-y-8">
-            {/* Hero Section */}
             <div className="text-center space-y-2 mb-8">
               <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
                 Centro de Recursos
@@ -202,9 +202,11 @@ const App: React.FC = () => {
                 el contenido, activa una VPN.
               </p>
               <div className="grid md:grid-cols-2 gap-4">
-                {VPN_TOOLS.map((item) => (
-                  <LinkButton key={item.title} item={item} />
-                ))}
+                {/* 🔴 MODIFICADO PARA USAR DATOS REMOTOS Y MAPPER DE ICONOS */}
+                {vpnTools.map((item: any, index: number) => {
+                   const itemReady = { ...item, icon: item.iconName ? getIconComponent(item.iconName) : item.icon };
+                   return <LinkButton key={item.title + index} item={itemReady} />;
+                })}
               </div>
             </GlassCard>
 
@@ -217,9 +219,11 @@ const App: React.FC = () => {
                 </h3>
               </div>
               <div className="grid gap-3">
-                {STREAMING_APPS.map((item) => (
-                  <LinkButton key={item.title} item={item} />
-                ))}
+                 {/* 🔴 MODIFICADO PARA USAR DATOS REMOTOS Y MAPPER DE ICONOS */}
+                {streamingApps.map((item: any, index: number) => {
+                   const itemReady = { ...item, icon: item.iconName ? getIconComponent(item.iconName) : item.icon };
+                   return <LinkButton key={item.title + index} item={itemReady} />;
+                })}
               </div>
             </GlassCard>
 
@@ -237,9 +241,11 @@ const App: React.FC = () => {
                 </p>
               </div>
               <div className="space-y-3">
-                {ACESTREAM_LISTS.map((item) => (
-                  <LinkButton key={item.title} item={item} />
-                ))}
+                {/* 🔴 MODIFICADO PARA USAR DATOS REMOTOS Y MAPPER DE ICONOS */}
+                {acestreamLists.map((item: any, index: number) => {
+                   const itemReady = { ...item, icon: item.iconName ? getIconComponent(item.iconName) : item.icon };
+                   return <LinkButton key={item.title + index} item={itemReady} />;
+                })}
               </div>
             </GlassCard>
           </div>
@@ -315,8 +321,9 @@ const App: React.FC = () => {
             </div>
 
             <div className="grid gap-4">
-              {WEB_CHANNELS.map((channel, index) => (
-                <GlassCard key={channel.name} delay={index * 0.1}>
+              {/* 🔴 USANDO DATOS REMOTOS (WEB CHANNELS) */}
+              {webChannels.map((channel: any, index: number) => (
+                <GlassCard key={channel.name + index} delay={index * 0.1}>
                   <div className="flex flex-col gap-8 md:gap-4 md:flex-row md:items-center justify-between relative z-20">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white/80 shrink-0">
@@ -361,7 +368,8 @@ const App: React.FC = () => {
             </div>
 
             {/* Deportes de Contacto Section */}
-            {CONTACT_SPORTS_CHANNELS.length > 0 && (
+            {/* 🔴 USANDO DATOS REMOTOS (CONTACT SPORTS) */}
+            {contactSports.length > 0 && (
               <>
                 <div className="text-center mt-12 mb-6">
                   <h3 className="text-2xl font-bold text-white mb-2">
@@ -371,8 +379,8 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="grid gap-4">
-                  {CONTACT_SPORTS_CHANNELS.map((channel, index) => (
-                    <GlassCard key={channel.name} delay={index * 0.1}>
+                  {contactSports.map((channel: any, index: number) => (
+                    <GlassCard key={channel.name + index} delay={index * 0.1}>
                       <div className="flex flex-col gap-8 md:gap-4 md:flex-row md:items-center justify-between relative z-20">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 shrink-0">
@@ -422,7 +430,11 @@ const App: React.FC = () => {
       </main>
 
       <footer className="border-t border-white/5 py-8 text-center text-white/30 text-sm">
-        <p>Designed by Tomypollas</p>
+        <p className="font-medium">Designed by Tomypollas</p>
+        <div className="flex items-center justify-center gap-2 mt-2 opacity-50">
+          <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
+          <span className="text-xs uppercase tracking-widest">Powered by FurboSync™</span>
+        </div>
       </footer>
     </div>
   );
