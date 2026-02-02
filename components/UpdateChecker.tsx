@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { App } from "@capacitor/app";
-import { Capacitor, CapacitorHttp } from "@capacitor/core"; // <--- 1. AÑADIDO Capacitor AQUÍ
+import { Capacitor } from "@capacitor/core"; 
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import { FileOpener } from "@capacitor-community/file-opener";
 import { Download } from "lucide-react";
@@ -20,18 +20,15 @@ const UpdateChecker: React.FC = () => {
   }, []);
 
   const checkForUpdate = async () => {
-    // 🛑 2. FILTRO DE SEGURIDAD:
-    // Si estamos en Web (no es nativo), paramos aquí y no hacemos nada.
+    // 🛑 FILTRO DE SEGURIDAD
     if (!Capacitor.isNativePlatform()) {
       return;
     }
 
     try {
-      // 1. Ver qué versión tiene la App instalada
       const appInfo = await App.getInfo();
       const currentVersion = appInfo.version;
 
-      // 2. Consultar GitHub (con truco anti-caché)
       const response = await fetch(`${VERSION_JSON_URL}?t=${Date.now()}`);
 
       if (!response.ok) {
@@ -40,7 +37,6 @@ const UpdateChecker: React.FC = () => {
 
       const data = await response.json();
 
-      // 3. Comparar versiones
       if (isNewerVersion(currentVersion, data.version)) {
         setUpdateAvailable(data);
       }
@@ -65,39 +61,34 @@ const UpdateChecker: React.FC = () => {
   const downloadAndInstall = async () => {
     if (!updateAvailable) return;
     setDownloading(true);
-    setProgress(10);
+    setProgress(10); // Feedback inicial
 
     try {
-      const response = await CapacitorHttp.get({
+      const fileName = "update.apk";
+
+      // ⚠️ CAMBIO CRÍTICO: Usamos downloadFile
+      // Esto descarga DIRECTAMENTE al disco, sin cargar los 32MB en la RAM.
+      // Evita que el Fire TV cierre la app por falta de memoria.
+      const result = await Filesystem.downloadFile({
         url: updateAvailable.downloadUrl,
-        responseType: "blob",
-        headers: {
-          "User-Agent": "FurboVacanoApp",
-          Accept: "application/vnd.android.package-archive",
-        },
+        path: fileName,
+        directory: Directory.Cache,
+        // recursive: true // Opcional, por seguridad
       });
 
-      if (response.status !== 200) {
-        throw new Error(`Error del servidor: ${response.status}`);
-      }
-
-      if (!response.data) {
-        throw new Error("La descarga vino vacía.");
-      }
-
+      // Como downloadFile no reporta progreso granular fácilmente sin listeners complejos,
+      // saltamos al 50% y luego al 100% cuando termine.
       setProgress(50);
 
-      const fileName = "update.apk";
-      const savedFile = await Filesystem.writeFile({
-        path: fileName,
-        data: response.data,
-        directory: Directory.Cache,
-      });
+      if (!result || !result.path) {
+        throw new Error("No se obtuvo la ruta del archivo descargado.");
+      }
 
       setProgress(100);
 
+      // Abrir el instalador
       await FileOpener.open({
-        filePath: savedFile.uri,
+        filePath: result.path,
         contentType: "application/vnd.android.package-archive",
       });
 
@@ -146,7 +137,8 @@ const UpdateChecker: React.FC = () => {
             <div className="space-y-3 pt-2">
               <div className="flex justify-between text-xs text-purple-300">
                 <span>Descargando...</span>
-                <span>{progress}%</span>
+                {/* Nota: El porcentaje puede saltar de 10 a 100, es normal con este método seguro */}
+                <span>{progress > 10 && progress < 100 ? "..." : progress + "%"}</span>
               </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div
