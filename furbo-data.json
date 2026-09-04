@@ -84,24 +84,19 @@
   ],
   "acestreamLists": [
     {
-      "title": "Agenda IPFS (TOP)",
-      "url": "https://ipfs.io/ipns/k2k4r8oqlcjxsritt5mczkcn4mmvcmymbqw7113fz2flkrerfwfps004/?tab=canales",
+      "title": "Elcano.top by @Lucas_m_o_o_m ... Vacaciones en el Mar.  (Primera Opcion)",
+      "url": "http://127.0.0.1:8080/ipns/k51qzi5uqu5dh5qej4b9wlcr5i6vhc7rcfkekhrxqek5c9lk6gdaiik820fecs/",
       "description": "Lista descentralizada antibloqueos. Muy recomendada.",
       "iconName": "play"
     },
     {
-      "title": "Lista 1 (IPFS)",
+      "title": "Elcano.top by @Lucas_m_o_o_m ... Vacaciones en el Mar. (Segunda Opcion)",
       "url": "https://ipfs.io/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
       "iconName": "play"
     },
     {
-      "title": "Lista 2 (DWeb)",
-      "url": "https://k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr.ipns.dweb.link/",
-      "iconName": "play"
-    },
-    {
-      "title": "Lista 3 (W3S)",
-      "url": "https://w3s.link/ipns/k51qzi5uqu5di462t7j4vu4akwfhvtjhy88qbupktvoacqfqe9uforjvhyi4wr/",
+      "title": "ACEStream NEW ERA + Agenda Deportiva",
+      "url": "http://127.0.0.1:8080/ipns/k2k4r8lm8tkmuxbc8lkmq1in3v0oya1p6pe9o5bu0hu30br5ko08k2gb/",
       "iconName": "play"
     }
   ],
